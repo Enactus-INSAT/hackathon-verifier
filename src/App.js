@@ -1,31 +1,16 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import ParticipantDetails from "./ParticipantDetails";
-import Login from "./Login";
-import Cookies from "js-cookie";
+import Scanner from "./scanner";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {useState} from "react";
 
-// HOC to check if the user is authenticated
-const ProtectedRoute = ({ element: Element, ...rest }) => {
-  const isLoggedIn = !!Cookies.get("jwt_token"); // Check if JWT token exists
 
-  // If user is not logged in, redirect to login page
-  if (!isLoggedIn) {
-    return <Navigate to="/" />;
-  }
-
-  // If user is logged in, render the provided element
-  return <Element {...rest} />;
-};
 
 function App() {
+    const [pageState, setPageState] = useState(0);
+    const [id, setId] = useState(null);
   return (
-      <Router basename="hackathon-verifier">
-        <Routes>
-          {/* Use ProtectedRoute for protected routes */}
-          <Route path="/" element={<Login />} />
-          <Route path="/records/:id" element={<ProtectedRoute element={ParticipantDetails} />} />
-        </Routes>
-      </Router>
+      (pageState === 0 ?    <Scanner setPageState={setPageState} setId={setId}   />: <ParticipantDetails setPageState={setPageState} id={id}    />)
+
   );
 }
 

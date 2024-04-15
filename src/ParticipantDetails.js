@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 
-const ParticipantDetails = () => {
+const ParticipantDetails = ({ id, setPageState }) => {
     const [record, setRecord] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { id } = useParams();
+
     const token = 'iv8bxeuzidpdelow5n3d4fgicd338f70ouxw6gg7';
 
     useEffect(() => {
@@ -35,6 +34,11 @@ const ParticipantDetails = () => {
             });
     }, []); // Run this effect only once, on component mount
 
+    const handleBackButtonClick = () => {
+        // Set the page state to 0
+        setPageState(0);
+    };
+
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -44,11 +48,16 @@ const ParticipantDetails = () => {
     }
 
     if (!record || !record[id - 1]) {
-        return <div>No record found</div>;
+        return <>
+            <div style={{backgroundColor: record[id - 1].paid === "FALSE" ? "red" : "green", paddingLeft: "3vw", height: "100vh" }}>
+            <div>No record found</div>
+            <button className="btn btn-primary mt-3" onClick={handleBackButtonClick}>Go Back</button>
+            </div>
+        </>;
     }
 
     return (
-        <div style={{ backgroundColor: record[id - 1].paid === "FALSE" ? "red" : "green", paddingLeft: "3vw", height: "100vh" }}>
+        <div style={{backgroundColor: record[id - 1].paid === "FALSE" ? "red" : "green", paddingLeft: "3vw", height: "100vh" }}>
             <h1>Records</h1>
             <div>
                 {Object.entries(record[id - 1]).map(([key, value]) => (
@@ -57,6 +66,8 @@ const ParticipantDetails = () => {
                     </p>
                 ))}
             </div>
+            {/* Bootstrap button to set the page state to 0 */}
+            <button className="btn btn-primary mt-3" onClick={handleBackButtonClick}>Go Back</button>
         </div>
     );
 }
