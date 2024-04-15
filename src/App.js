@@ -19,7 +19,7 @@ const ProtectedRoute = ({ element: Element, ...rest }) => {
 
 function App() {
   return (
-      <Router>
+      <Router basename="hackathon-verifier">
         <Routes>
           {/* Use ProtectedRoute for protected routes */}
           <Route path="/" element={<Login />} />
